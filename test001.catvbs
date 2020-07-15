@@ -1,0 +1,84 @@
+Language="VBSCRIPT"
+sub CreatPart(cnt,ridus)
+    part_name="Part"+CStr(cnt)
+    Set documents1 = CATIA.Documents
+
+    Set oPartDoc = documents1.Add("Part")
+
+    Set part1 = oPartDoc.Part
+
+    Set bodies1 = part1.Bodies
+
+    Set body1 = bodies1.Item("零件几何体")
+
+    Set sketches1 = body1.Sketches
+
+    Set originElements1 = part1.OriginElements
+
+    Set reference1 = originElements1.PlaneXY
+
+    Set sketch1 = sketches1.Add(reference1)
+
+    Dim arrayOfVariantOfDouble1(8)
+    arrayOfVariantOfDouble1(0) = 0.000000
+    arrayOfVariantOfDouble1(1) = 0.000000
+    arrayOfVariantOfDouble1(2) = 0.000000
+    arrayOfVariantOfDouble1(3) = 1.000000
+    arrayOfVariantOfDouble1(4) = 0.000000
+    arrayOfVariantOfDouble1(5) = 0.000000
+    arrayOfVariantOfDouble1(6) = 0.000000
+    arrayOfVariantOfDouble1(7) = 1.000000
+    arrayOfVariantOfDouble1(8) = 0.000000
+    sketch1.SetAbsoluteAxisData arrayOfVariantOfDouble1
+
+    part1.InWorkObject = sketch1
+
+    Set factory2D1 = sketch1.OpenEdition()
+
+    Set geometricElements1 = sketch1.GeometricElements
+
+    Set axis2D1 = geometricElements1.Item("绝对轴")
+
+    Set line2D1 = axis2D1.GetItem("横向")
+
+    line2D1.ReportName = 1
+
+    Set line2D2 = axis2D1.GetItem("纵向")
+
+    line2D2.ReportName = 2
+
+    Set circle2D1 = factory2D1.CreateClosedCircle(0.000000, 0.000000, ridus)
+
+    Set point2D1 = axis2D1.GetItem("原点")
+
+    circle2D1.CenterPoint = point2D1
+
+    circle2D1.ReportName = 3
+
+    sketch1.CloseEdition 
+
+    part1.InWorkObject = sketch1
+
+    part1.Update 
+
+    Set shapeFactory1 = part1.ShapeFactory
+
+    Set pad1 = shapeFactory1.AddNewPad(sketch1, 20.000000)
+
+    part1.Update 
+
+
+    Set oPartDoc = CATIA.ActiveDocument
+   
+    filename="C:\Users\Administrator\Desktop\"+part_name+".CATPart"
+    oPartDoc.SaveAs filename
+end sub
+
+Sub CATMain(cnt,X)
+
+    For index  = 1 To cnt
+        ridus=index*5 
+        CreatPart index,ridus
+    Next
+    
+End Sub
