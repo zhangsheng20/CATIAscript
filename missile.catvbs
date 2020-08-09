@@ -1,0 +1,43 @@
+Language="VBSCRIPT"
+
+Sub CATMain()
+
+Set documents1 = CATIA.Documents
+
+Set partDocument1 = documents1.Open("C:\Users\Administrator\Desktop\quantum stealth\CATIA开发\CATIAscript\MissileModel.CATPart")
+
+Set part1 = partDocument1.Part
+
+Set parameters1 = part1.Parameters
+Set theta1 = parameters1.Item("theta1")
+theta1.Value = 10.000000
+
+Set parameters2 = part1.Parameters
+Set length1 = parameters2.Item("R")
+length1.Value = 200.000000
+
+Set parameters3 = part1.Parameters
+Set length2 = parameters3.Item("H")
+length2.Value = 5200.000000
+
+Set parameters4 = part1.Parameters
+Set length3 = parameters4.Item("r")
+length3.Value = 200.000000
+
+Set parameters5 = part1.Parameters
+Set length4 = parameters5.Item("h")
+length4.Value = 700.000000
+
+Set parameters6 = part1.Parameters
+Set theta2 = parameters6.Item("theta2")
+theta2.Value = 20.000000
+
+Set partDocument1 = CATIA.ActiveDocument
+
+part_name="Missile-t1-" + CStr(theta1.Value) + "-t2-" + CStr(theta2.Value) + "-H-" +  CStr(length2.Value) + "-R-"
+part_name=part_name+ CStr(length1.Value) +"-h-" +  CStr(length4.Value) + "-r-"+ CStr(length3.Value)
+             
+filename="C:\Users\Administrator\Desktop\" + part_name + ".CATPart"
+partDocument1.SaveAs filename
+
+End Sub
