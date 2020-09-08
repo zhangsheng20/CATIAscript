@@ -1,43 +1,71 @@
 Language="VBSCRIPT"
 
-Sub CATMain()
+'改变尾翼的展长
 
-Set documents1 = CATIA.Documents
 
-Set partDocument1 = documents1.Open("C:\Users\Administrator\Desktop\quantum stealth\CATIA开发\CATIAscript\MissileModel.CATPart")
+Sub DrawMissile(body_deg_in,body_R_in,body_H_in,wing_r_in,tail_deg_in,tail_backdeg_in,wing_S_in,partDocument1,path)
 
-Set part1 = partDocument1.Part
 
-Set parameters1 = part1.Parameters
-Set theta1 = parameters1.Item("theta1")
-theta1.Value = 10.000000
+    Set part1 = partDocument1.Part
 
-Set parameters2 = part1.Parameters
-Set length1 = parameters2.Item("R")
-length1.Value = 200.000000
+    Set parameters1 = part1.Parameters
+    Set body_deg = parameters1.Item("theta1")
+    body_deg.Value = body_deg_in
 
-Set parameters3 = part1.Parameters
-Set length2 = parameters3.Item("H")
-length2.Value = 5200.000000
+    Set parameters2 = part1.Parameters
+    Set body_R = parameters2.Item("R")
+    body_R.Value = body_R_in
 
-Set parameters4 = part1.Parameters
-Set length3 = parameters4.Item("r")
-length3.Value = 200.000000
+    Set parameters3 = part1.Parameters
+    Set body_H = parameters3.Item("H")
+    body_H.Value = body_H_in
 
-Set parameters5 = part1.Parameters
-Set length4 = parameters5.Item("h")
-length4.Value = 700.000000
+    Set parameters4 = part1.Parameters
+    Set wing_r = parameters4.Item("r")
+    wing_r.Value = wing_r_in
 
-Set parameters6 = part1.Parameters
-Set theta2 = parameters6.Item("theta2")
-theta2.Value = 20.000000
 
-Set partDocument1 = CATIA.ActiveDocument
+    Set parameters6 = part1.Parameters
+    Set tail_deg = parameters6.Item("theta2")
+    tail_deg.Value = tail_deg_in
 
-part_name="Missile-t1-" + CStr(theta1.Value) + "-t2-" + CStr(theta2.Value) + "-H-" +  CStr(length2.Value) + "-R-"
-part_name=part_name+ CStr(length1.Value) +"-h-" +  CStr(length4.Value) + "-r-"+ CStr(length3.Value)
-             
-filename="C:\Users\Administrator\Desktop\" + part_name + ".CATPart"
-partDocument1.SaveAs filename
+    Set parameters7 = part1.Parameters
+    Set wing_S = parameters7.Item("S")
+    wing_S.Value = wing_S_in
 
+    Set parameters8 = part1.Parameters
+    Set tail_backdeg = parameters8.Item("theta3")
+    tail_backdeg.Value = tail_backdeg_in
+
+    part1.Update 
+    Set partDocument1 = CATIA.ActiveDocument
+
+
+    part_name="Missile-t1-" + CStr(body_deg.Value) + "-t2-" + CStr(tail_deg.Value)+ "-t3-" + CStr(tail_backdeg.Value) + "-H-" +  CStr(body_H.Value) + "-R-"+ CStr(body_R.Value) + "-r-"+ CStr(wing_r.Value)+"-S-" +  CStr(wing_S.Value)            
+    filename=path+"\"+ part_name + ".igs"
+    partDocument1.ExportData filename , "igs"
+
+
+end Sub
+
+Sub CATMain( )
+    dirname = 4
+    Set documents1 = CATIA.Documents
+    Set partDocument1 = documents1.Open("C:\Users\Administrator\Desktop\quantum stealth\optimization\MissileModel-houlue.CATPart")
+
+    dir="C:\Users\Administrator\Desktop\"
+    path=dir +CStr(dirname)
+    dim fso,fld
+    set fso  = createobject("scripting.filesystemobject")
+    set fld = fso.createfolder(path) '利用createfolder对象在d盘下创建了一个文件夹
+
+    cnt=8
+    For index  = 1 To cnt
+        tail_backdeg_opt=89-2*index
+        DrawMissile 11, 200 ,6000 ,420 ,50 ,tail_backdeg_opt,0.4,partDocument1,path
+    Next
+        
+
+    Set partDocument1 = CATIA.ActiveDocument
+    partDocument1.Close 
 End Sub
