@@ -48,7 +48,7 @@ Sub DrawMissile(body_deg_in,body_R_in,body_H_in,wing_r_in,tail_deg_in,tail_backd
 
 end Sub
 
-Sub CATMain( )
+Sub CATMain()
     dirname = 4
     Set documents1 = CATIA.Documents
     Set partDocument1 = documents1.Open("C:\Users\Administrator\Desktop\quantum stealth\optimization\MissileModel-houlue.CATPart")
@@ -68,4 +68,5 @@ Sub CATMain( )
 
     Set partDocument1 = CATIA.ActiveDocument
     partDocument1.Close 
+    Catia.Quit
 End Sub

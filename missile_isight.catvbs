@@ -1,0 +1,76 @@
+Language="VBSCRIPT"
+
+'改变尾翼的展长
+
+
+Sub CATMain( )
+    child_dirname = 4
+    Set documents1 = CATIA.Documents
+    Set partDocument1 = documents1.Open("C:\Users\Administrator\Desktop\quantum stealth\optimization\MissileModel-houlue.CATPart")
+
+    dir="C:\Users\Administrator\Desktop\iSIGHT\outputfile\"
+    path=dir +CStr(child_dirname)
+    dim fso,fld
+    set fso  = createobject("scripting.filesystemobject")
+    if  fso.folderexists(path)then
+        fso.DeleteFolder(path),true
+        fso.createfolder(path) '利用createfolder对象在d盘下创建了一个文件夹
+    else 
+         fso.createfolder(path) '利用createfolder对象在d盘下创建了一个文件夹
+    end if
+
+
+
+    'body_deg_in,body_R_in,body_H_in,wing_r_in,tail_deg_in,tail_backdeg_in,wing_S_in,partDocument1,path
+    body_deg_in=11
+    body_R_in=200
+    body_H_in=6000
+    wing_r_in=420
+    tail_deg_in=50
+    tail_backdeg_in=75
+    wing_S_in=0.4
+
+    Set part1 = partDocument1.Part
+
+    Set parameters1 = part1.Parameters
+    Set body_deg = parameters1.Item("theta1")
+    body_deg.Value = body_deg_in
+
+    Set parameters2 = part1.Parameters
+    Set body_R = parameters2.Item("R")
+    body_R.Value = body_R_in
+
+    Set parameters3 = part1.Parameters
+    Set body_H = parameters3.Item("H")
+    body_H.Value = body_H_in
+
+    Set parameters4 = part1.Parameters
+    Set wing_r = parameters4.Item("r")
+    wing_r.Value = wing_r_in
+
+
+    Set parameters6 = part1.Parameters
+    Set tail_deg = parameters6.Item("theta2")
+    tail_deg.Value = tail_deg_in
+
+    Set parameters7 = part1.Parameters
+    Set wing_S = parameters7.Item("S")
+    wing_S.Value = wing_S_in
+
+    Set parameters8 = part1.Parameters
+    Set tail_backdeg = parameters8.Item("theta3")
+    tail_backdeg.Value = tail_backdeg_in
+
+    part1.Update 
+    Set partDocument1 = CATIA.ActiveDocument
+
+
+    'part_name="Missile-t1-" + CStr(body_deg.Value) + "-t2-" + CStr(tail_deg.Value)+ "-t3-" + CStr(tail_backdeg.Value) + "-H-" +  CStr(body_H.Value) + "-R-"+ CStr(body_R.Value) + "-r-"+ CStr(wing_r.Value)+"-S-" +  CStr(wing_S.Value)            
+    part_name=CStr(child_dirname)
+    filename=path+"\"+ part_name + ".igs"
+    partDocument1.ExportData filename , "igs"
+
+    partDocument1.Close 
+    Catia.Quit
+
+End Sub
