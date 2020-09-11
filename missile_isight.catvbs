@@ -6,10 +6,14 @@ Language="VBSCRIPT"
 Sub CATMain( )
     child_dirname = 4
     Set documents1 = CATIA.Documents
-    Set partDocument1 = documents1.Open("C:\Users\Administrator\Desktop\quantum stealth\optimization\MissileModel-houlue.CATPart")
 
-    dir="C:\Users\Administrator\Desktop\iSIGHT\outputfile\"
-    path=dir +CStr(child_dirname)
+    document_path=RTrim("C:\Users\Administrator\Desktop\quantum stealth\optimization                ")
+    document_name=RTrim("MissileModel-houlue.CATPart                 ")
+
+    Set partDocument1 = documents1.Open(document_path+"\"+document_name)
+
+    dir=RTrim("C:\Users\Administrator\Desktop\iSIGHT\output                                                     ")
+    path=dir +"\"+CStr(child_dirname)
     dim fso,fld
     set fso  = createobject("scripting.filesystemobject")
     if  fso.folderexists(path)then
